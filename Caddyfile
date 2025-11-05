@@ -1,0 +1,5 @@
+{$DOMAIN_REPORT} {
+    encode gzip
+    reverse_proxy {$REPORT_INTERNAL}
+    tls {$EMAIL_ACME}
+}
