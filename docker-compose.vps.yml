@@ -1,5 +1,4 @@
 version: "3.9"
-
 services:
   caddy:
     image: caddy:2.8
@@ -10,35 +9,21 @@ services:
       - "443:443"
     environment:
       - DOMAIN_REPORT=${DOMAIN_REPORT}
-      - EMAIL_ACME=${EMAIL_ACME}
       - REPORT_INTERNAL=${REPORT_INTERNAL}
+      - DOMAIN_API=${DOMAIN_API}
+      - API_INTERNAL=${API_INTERNAL}
+      - EMAIL_ACME=${EMAIL_ACME}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+    depends_on: []  
     networks: [analytics-net]
-
-  report-service-php:
-    image: report-service-php:latest
-    container_name: report-service-php
-    restart: unless-stopped
-    environment:
-      - DATA_SOURCE=DW
-      - DW_HOST=postgres-dw
-      - DW_PORT=5432
-      - DW_DB=BALONCESTO_DW
-      - DW_USER=dw_report
-      - DW_PASSWORD=dw_report_2025!
-      - REDIS_HOST=redis-cache
-      - REDIS_PORT=6379
-      - REDIS_DB=0
-      - REDIS_TTL_SECONDS=86400
-    networks: [analytics-net]
-
-networks:
-  analytics-net:
-    external: true
 
 volumes:
   caddy_data:
   caddy_config:
+
+networks:
+  analytics-net:
+    external: true
