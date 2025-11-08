@@ -1,18 +1,22 @@
 version: "3.9"
+
 services:
   caddy:
     image: caddy:2.8
     container_name: edge-caddy
     restart: unless-stopped
+    
     ports:
-      - "80:80"
-      - "443:443"
+      - "9080:80"
+      - "9443:443"
+
     environment:
       - DOMAIN_REPORT=${DOMAIN_REPORT}
       - REPORT_INTERNAL=${REPORT_INTERNAL}
       - DOMAIN_API=${DOMAIN_API}
       - API_INTERNAL=${API_INTERNAL}
       - EMAIL_ACME=${EMAIL_ACME}
+
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -21,11 +25,12 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "10m"   
-        max-file: "5"  
-        
-    depends_on: []  
-    networks: [analytics-net]
+        max-size: "10m"
+        max-file: "5"
+
+    depends_on: []
+    networks:
+      - analytics-net
 
 volumes:
   caddy_data:
